@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 
-node_modules
+
 # Keep environment variables out of version control
 .env
 
