@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../api/axios";
-import bgImage from "../assets/bg.jpg";
+import api from "../../api/axios.js";
+import bgImage from "../../assets/bg.jpg";
 
 const TwoFAVerify = () => {
   const [code, setCode] = useState("");

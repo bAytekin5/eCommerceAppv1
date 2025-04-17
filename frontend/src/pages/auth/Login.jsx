@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../api/axios";
+import api from "../../api/axios";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
 import { GoogleLogin } from "@react-oauth/google";
-import bgImage from "../assets/bg.jpg";
+import bgImage from "../../assets/bg.jpg";
 
 const loginSchema = z.object({
   email: z.string().email("Geçerli bir e-posta adresi girin."),

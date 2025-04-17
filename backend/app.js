@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5001;
 
 app.use(
   cors({
-    origin: "http://localhost:5173", 
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -29,10 +29,11 @@ app.use("/api/categories", categoryRoute);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({
+  res.status(err.statusCode || 500).json({
     message: err.message || "Bir hata oluştu",
   });
 });
+
 app.listen(PORT, () => {
   console.log(`Sunucu http://localhost:${PORT} portunda çalışıyor...`);
 });

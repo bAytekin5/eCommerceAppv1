@@ -103,7 +103,7 @@ export const googleLoginService = async (credential) => {
   }
 
   const token = jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
   );
@@ -133,7 +133,7 @@ export const verify2FACode = async ({ userId, code }) => {
   });
 
   const token = jwt.sign(
-    { id: user.id, email: user.email },
+    { id: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   );

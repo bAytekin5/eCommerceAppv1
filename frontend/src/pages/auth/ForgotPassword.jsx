@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
-import api from "../api/axios";
-import bgImage from "../assets/bg.jpg";
+import api from "../../api/axios";
+import bgImage from "../../assets/bg.jpg";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");

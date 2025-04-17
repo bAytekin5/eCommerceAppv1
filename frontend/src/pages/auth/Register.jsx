@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { z } from "zod";
-import bgImage from "../assets/bg.jpg";
-import api from "../api/axios";
+import bgImage from "../../assets/bg.jpg";
+import api from "../../api/axios";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 
 const registerSchema = z

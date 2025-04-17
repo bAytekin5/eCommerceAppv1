@@ -1,50 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShoppingCart, Star } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useCartStore from "../store/cartStore";
 import Footer from "../components/Footer";
 import bgImage from "../assets/bg.jpg";
+import api from "../api/axios";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCartStore();
 
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Kablosuz Kulaklık",
-      price: 749.99,
-      image: "https://picsum.photos/200/300?grayscale",
-      rating: 4.5,
-      badge: "Yeni",
-      isFavorite: false,
-    },
-    {
-      id: 2,
-      name: "Akıllı Saat",
-      price: 1299.0,
-      image: "https://picsum.photos/200/300?grayscale",
-      rating: 4.7,
-      badge: "%30 İndirim",
-      isFavorite: false,
-    },
-    {
-      id: 3,
-      name: "Bluetooth Hoparlör",
-      price: 499.0,
-      image: "https://picsum.photos/200/300?grayscale",
-      rating: 4.4,
-      badge: "Tükendi",
-      isFavorite: false,
-    },
-  ]);
-
-  const toggleFavorite = (id) => {
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
-      )
-    );
-  };
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = [
     "Elektronik",
@@ -56,6 +24,20 @@ const Home = () => {
     "Spor",
     "Giyim",
   ];
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products");
+        setProducts(res.data.data);
+      } catch (err) {
+        console.error("Ürünler yüklenemedi:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <div className="bg-white min-h-screen">
@@ -76,7 +58,7 @@ const Home = () => {
           className="relative z-10 text-white max-w-2xl"
         >
           <h1 className="text-5xl font-extrabold mb-4 drop-shadow">
-            eMart’a Hoş Geldiniz
+            eCommerce'a Hoş Geldiniz
           </h1>
           <p className="text-lg mb-6 drop-shadow-sm">
             Uygun fiyatlarla kaliteli alışverişin keyfini çıkarın.
@@ -102,7 +84,7 @@ const Home = () => {
         >
           Kategoriler
         </motion.h2>
-        <div className="flex  gap-4 overflow-x-auto pb-4">
+        <div className="flex gap-4 overflow-x-auto pb-4">
           {categories.map((cat, i) => (
             <motion.span
               key={i}
@@ -126,80 +108,59 @@ const Home = () => {
           Popüler Ürünler
         </motion.h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {products.map((product) => (
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              key={product.id}
-              className="bg-white rounded-xl shadow-md overflow-hidden relative group"
-            >
-              {product.badge && (
-                <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
-                  {product.badge}
-                </span>
-              )}
-
-              {/* Kalp */}
-              <button
-                onClick={() => toggleFavorite(product.id)}
-                className="absolute top-2 right-2 z-10 bg-white p-1 rounded-full shadow hover:scale-110 transition"
+        {loading ? (
+          <p className="text-center text-gray-500">Yükleniyor...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {products.map((product) => (
+              <motion.div
+                whileHover={{ scale: 1.03 }}
+                key={product.id}
+                className="bg-white rounded-xl shadow-md overflow-hidden relative group"
               >
-                {product.isFavorite ? (
-                  <svg
-                    className="h-5 w-5 text-red-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 18.657l-6.828-6.829a4 4 0 010-5.656z" />
-                  </svg>
-                ) : (
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 5.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                  </svg>
+                {product.badge && (
+                  <span className="absolute top-2 left-2 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
+                    {product.badge}
+                  </span>
                 )}
-              </button>
 
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-48 object-cover"
-              />
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-48 object-cover"
+                />
 
-              <div className="p-4">
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-blue-600 font-bold">
-                  {product.price.toFixed(2)}₺
-                </p>
-                <div className="flex items-center text-yellow-500">
-                  <Star size={16} />
-                  <span className="ml-1">{product.rating}</span>
+                <div className="p-4">
+                  <h3 className="text-lg text-gray-700 font-semibold">
+                    {product.name}
+                  </h3>
+                  <p className="text-black font-bold">
+                    {product.price.toFixed(2)}₺
+                  </p>
+                  <div className="flex items-center text-yellow-500">
+                    <Star size={16} />
+                    <span className="ml-1">{product.rating || "4.5"}</span>
+                  </div>
+
+                  <div className="flex justify-between mt-4">
+                    <button
+                      onClick={() => addToCart(product)}
+                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Sepete Ekle
+                    </button>
+                    <button
+                      onClick={() => navigate(`/products/${product.id}`)}
+                      className="text-blue-600 hover:underline text-sm"
+                    >
+                      Detay
+                    </button>
+                  </div>
                 </div>
-
-                <div className="flex justify-between mt-4">
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
-                    Sepete Ekle
-                  </button>
-                  <button
-                    onClick={() => navigate(`/products/${product.id}`)}
-                    className="text-blue-600 hover:underline text-sm"
-                  >
-                    Detay
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 
       <Footer />

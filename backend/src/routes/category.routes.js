@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { create, getAll } from "../controllers/category.controllers.js";
+import { create, getAll, remove, update } from "../controllers/category.controllers.js";
 import { categorySchema } from "../schemas/category.schema.js";
 import { validateWithZod } from "../middlewares/validateWithZod.js";
 import { requireAdmin } from "../middlewares/requireAdmin.js";
@@ -15,5 +15,13 @@ categoryRoute.post(
   create
 );
 categoryRoute.get("/", getAll);
+categoryRoute.put(
+  "/:id",
+  verifyToken,
+  requireAdmin,
+  validateWithZod(categorySchema),
+  update
+);
+categoryRoute.delete("/:id", verifyToken, requireAdmin, remove);
 
 export default categoryRoute;

@@ -25,3 +25,31 @@ export const getAllCategories = async () => {
     orderBy: { name: "asc" },
   });
 };
+
+export const updateCategory = async (id, { name }) => {
+  const existing = await prisma.category.findUnique({
+    where: { id: parseInt(id) },
+  });
+
+  if (!existing) {
+    throw new Error("Kategori Bulunamadı");
+  }
+
+  return await prisma.category.update({
+    where: { id: parseInt(id) },
+    data: { name },
+  });
+};
+
+export const deleteCategory = async (id) => {
+  const existing = await prisma.category.findUnique({
+    where: { id: parseInt(id) },
+  });
+  if (!existing) {
+    throw new Error("Kategori bulunamadı");
+  }
+
+  return await prisma.category.delete({
+    where: { id: parseInt(id) },
+  });
+};

@@ -2,10 +2,10 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import api from "../api/axios";
+import api from "../../api/axios.js";
 import { Lock, Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
-import bgImage from "../assets/bg.jpg";
+import bgImage from "../../assets/bg.jpg";
 
 const passwordSchema = z
   .object({
